@@ -37,5 +37,13 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        boolean isUpdated = userService.updateUser(id, updatedUser);
+        if (isUpdated) {
+            return ResponseEntity.ok("User updated Successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
