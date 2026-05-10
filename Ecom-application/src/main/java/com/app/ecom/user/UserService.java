@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -20,15 +21,9 @@ public class UserService {
         userList.add(user);
     }
 
-    public User fetchById(Long id){
-        User user = null;
-
-        for(User u : userList){
-            if(u.id.equals(id)){
-                user = u;
-            }
-        }
-
-        return user;
+    public Optional<User> fetchById(Long id){
+        return userList.stream()
+                .filter(u -> u.getId().equals(id))
+                .findFirst();
     }
 }

@@ -4,6 +4,8 @@ package com.app.ecom.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -17,9 +19,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers(){
+    public ResponseEntity<List<User>> getAllUsers(){
+
         List<User> userList = userService.fetchAllUsers();
-        return userList;
+        return ResponseEntity.ok(userList);
     }
 
     @PostMapping
@@ -28,9 +31,11 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id){
-        User user = userService.fetchById(id);
-
-        return user;
+    public ResponseEntity<User> getUserById(@PathVariable Long id){
+        return userService.fetchById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
+
+
 }
