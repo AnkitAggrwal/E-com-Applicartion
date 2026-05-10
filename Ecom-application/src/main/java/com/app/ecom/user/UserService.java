@@ -1,5 +1,6 @@
 package com.app.ecom.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -8,34 +9,31 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private List<User> userList = new ArrayList<>();
-    private Long id = 1L;
+
+    private final UserRepository userRepository;
 
     public List<User> fetchAllUsers(){
-        return userList;
+        return userRepository.findAll();
     }
 
     public void addUser(User user){
-        user.setId(id++);
-        userList.add(user);
+        userRepository.save(user);
     }
 
     public Optional<User> fetchById(Long id){
-        return userList.stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst();
+        return userRepository.findById(id);
     }
 
     public boolean updateUser(Long id, User updatedUser){
-        return userList.stream()
-                .filter(u -> u.getId().equals(id))
-                .findFirst()
-                .map(existingUser -> {
-                    existingUser.setFirstName(updatedUser.getFirstName());
-                    existingUser.setLastName(updatedUser.getLastName());
-                    return true;
-                })
-                .orElse(false);
+        User user = userRepository.findById(updatedUser.getId()).orElse(null);
+        if (user == null) {
+            return false;
+        }
+        user.setFirstName(updatedUser.getFirstName());
+        user.setLastName(updatedUser.getLastName());
+
+        return true;
     }
 }
