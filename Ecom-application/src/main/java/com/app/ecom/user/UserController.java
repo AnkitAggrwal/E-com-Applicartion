@@ -2,6 +2,7 @@ package com.app.ecom.user;
 
 //import org.apache.catalina.User;
 
+import com.app.ecom.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,9 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserResponse>> getAllUsers(){
 
-        List<User> userList = userService.fetchAllUsers();
+        List<UserResponse> userList = userService.fetchAllUsers();
         return ResponseEntity.ok(userList);
     }
 
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id){
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id){
         return userService.fetchById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
