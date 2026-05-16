@@ -2,6 +2,7 @@ package com.app.ecom.user;
 
 //import org.apache.catalina.User;
 
+import com.app.ecom.user.dto.UserRequest;
 import com.app.ecom.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,10 @@ public class UserController {
     }
 
     @PostMapping
-    public void create(@RequestBody User user){
+    public String create(@RequestBody UserRequest user){
         userService.addUser(user);
+
+        return "User created successfully";
     }
 
     @GetMapping("/{id}")

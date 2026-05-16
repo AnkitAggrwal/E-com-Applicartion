@@ -11,7 +11,7 @@ public class EcomApplication {
 
 		SpringApplication.run(EcomApplication.class, args);
 
-		System.out.println("Hello World");
+		System.out.println("Service has started successfully");
 	}
 
 }

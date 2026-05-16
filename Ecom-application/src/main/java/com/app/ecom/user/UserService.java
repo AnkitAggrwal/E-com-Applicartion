@@ -1,5 +1,7 @@
 package com.app.ecom.user;
 
+import com.app.ecom.address.Address;
+import com.app.ecom.user.dto.UserRequest;
 import com.app.ecom.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,23 @@ public class UserService {
                 .toList();
     }
 
-    public void addUser(User user){
+    public void addUser(UserRequest userRequest){
+        User user = new User();
+        user.setFirstName(userRequest.getFirstName());
+        user.setLastName(userRequest.getLastName());
+        user.setEmail(userRequest.getEmail());
+        user.setPhone(userRequest.getPhone());
+        if(userRequest.getAddressDto() != null) {
+            user.setAddress(
+                    Address.builder()
+                            .street(userRequest.getAddressDto().getStreet())
+                            .city(userRequest.getAddressDto().getCity())
+                            .state(userRequest.getAddressDto().getState())
+                            .zipcode(userRequest.getAddressDto().getZipcode())
+                            .country(userRequest.getAddressDto().getCountry())
+                            .build()
+            );
+        }
         userRepository.save(user);
     }
 
