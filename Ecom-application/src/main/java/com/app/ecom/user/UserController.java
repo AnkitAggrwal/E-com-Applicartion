@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UserRequest updatedUser) {
         boolean isUpdated = userService.updateUser(id, updatedUser);
         if (isUpdated) {
             return ResponseEntity.ok("User updated Successfully");
