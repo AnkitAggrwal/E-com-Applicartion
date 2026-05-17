@@ -5,6 +5,8 @@ import com.app.ecom.product.dto.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -20,15 +22,21 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(product);
 
+        ProductResponse response = mapToProductResponse(savedProduct);
+
+        return response;
+    }
+
+    public ProductResponse mapToProductResponse(Product product){
         ProductResponse response = new ProductResponse();
-        response.setId(savedProduct.getId());
-        response.setName(savedProduct.getName());
-        response.setDescription(savedProduct.getDescription());
-        response.setPrice(savedProduct.getPrice());
-        response.setStockQuantity(savedProduct.getStockQuantity());
-        response.setCategory(savedProduct.getCategory());
-        response.setImageUrl(savedProduct.getImageUrl());
-        response.setActive(savedProduct.getActive());
+        response.setId(product.getId());
+        response.setName(product.getName());
+        response.setDescription(product.getDescription());
+        response.setPrice(product.getPrice());
+        response.setStockQuantity(product.getStockQuantity());
+        response.setCategory(product.getCategory());
+        response.setImageUrl(product.getImageUrl());
+        response.setActive(product.getActive());
 
         return response;
     }
@@ -40,5 +48,18 @@ public class ProductService {
         product.setDescription(productRequest.getDescription());
         product.setStockQuantity(productRequest.getStockQuantity());
         product.setImageUrl(productRequest.getImageUrl());
+    }
+
+    public Optional<ProductResponse> updateProduct(Long id, ProductRequest productRequest) {
+
+        return productRepository.findById(id)
+                .map(existingProduct -> {
+
+                    updateProductFromRequest(existingProduct, productRequest);
+
+                    Product updatedProduct = productRepository.save(existingProduct);
+
+                    return mapToProductResponse(updatedProduct);
+                });
     }
 }
