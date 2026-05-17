@@ -70,4 +70,31 @@ public class ProductService {
                 .map(this::mapToProductResponse)
                 .toList();
     }
+
+    public List<ProductResponse> findByActiveTrue(){
+        return productRepository.findByActiveTrue().stream()
+                .map(this::mapToProductResponse)
+                .toList();
+    }
+
+    public boolean deleteProduct(Long id) {
+
+
+        return productRepository.findById(id)
+                .map(product -> {
+                    product.setActive(false);
+                    productRepository.save(product);
+                    return true;
+                }).orElse(false);
+    }
+
+    public List<ProductResponse> searchProducts(String keyword) {
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .filter(product -> product.getName().toLowerCase().contains(keyword.toLowerCase()) ||
+                        product.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
+                        product.getCategory().toLowerCase().contains(keyword.toLowerCase()))
+                .map(this::mapToProductResponse)
+                .toList();
+    }
 }

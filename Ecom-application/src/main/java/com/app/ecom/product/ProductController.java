@@ -22,11 +22,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ResponseEntity<ProductResponse>> getAllProducts(){
+    public ResponseEntity<List<ProductResponse>> getAllProducts(){
         List<ProductResponse> products = productService.getAllProducts();
-        return products.stream()
-                .map(ResponseEntity::ok)
-                .toList();
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<ProductResponse>> activeTrue(){
+        List<ProductResponse> products = productService.findByActiveTrue();
+        return ResponseEntity.ok(products);
     }
 
     @PutMapping("/{id}")
@@ -34,5 +38,17 @@ public class ProductController {
         return productService.updateProduct(id, productRequest)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteProd(@PathVariable Long id){
+        boolean deleted = productService.deleteProduct(id);
+
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponse>> searchProduct(@RequestMapping String keyword){
+        return ResponseEntity.ok(productService.searchProducts(keyword));
     }
 }
