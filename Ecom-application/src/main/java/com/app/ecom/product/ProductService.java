@@ -5,6 +5,7 @@ import com.app.ecom.product.dto.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -61,5 +62,12 @@ public class ProductService {
 
                     return mapToProductResponse(updatedProduct);
                 });
+    }
+
+    public List<ProductResponse> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .map(this::mapToProductResponse)
+                .toList();
     }
 }

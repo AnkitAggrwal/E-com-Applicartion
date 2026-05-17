@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
@@ -17,6 +19,14 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest){
         return new ResponseEntity<ProductResponse>(productService.createProduct(productRequest), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public List<ResponseEntity<ProductResponse>> getAllProducts(){
+        List<ProductResponse> products = productService.getAllProducts();
+        return products.stream()
+                .map(ResponseEntity::ok)
+                .toList();
     }
 
     @PutMapping("/{id}")
