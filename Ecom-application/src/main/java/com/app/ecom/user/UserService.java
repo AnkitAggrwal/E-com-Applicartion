@@ -92,4 +92,13 @@ public class UserService {
 
         }
     }
+
+    public User getUserById(Long id){
+        User user = userRepository.findById(id).orElse(null);
+        if(user == null) {
+            log.warn("User with id " + id + " not found.");
+        }
+
+        return user;
+    }
 };
