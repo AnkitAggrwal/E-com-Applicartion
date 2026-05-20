@@ -89,12 +89,10 @@ public class ProductService {
     }
 
     public List<ProductResponse> searchProducts(String keyword) {
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productRepository.searchProducts(keyword);
         return products.stream()
-                .filter(product -> product.getName().toLowerCase().contains(keyword.toLowerCase()) ||
-                        product.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
-                        product.getCategory().toLowerCase().contains(keyword.toLowerCase()))
                 .map(this::mapToProductResponse)
                 .toList();
     }
 }
+
