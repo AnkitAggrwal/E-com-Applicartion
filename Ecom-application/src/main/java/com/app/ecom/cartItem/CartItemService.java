@@ -129,6 +129,7 @@ public class CartItemService {
                         cartItem.getPrice().longValue()).sum();
 
         return CartItemResponse.builder()
+                .userId(userId)
                 .products(products)
                 .totalPrice(BigDecimal.valueOf(totalPrice))
                 .build();
