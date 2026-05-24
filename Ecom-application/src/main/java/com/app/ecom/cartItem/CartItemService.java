@@ -134,4 +134,24 @@ public class CartItemService {
                 .totalPrice(BigDecimal.valueOf(totalPrice))
                 .build();
     }
+
+    public List<CartItem> getCart(String userId){
+        Optional<User> user = userRepository.findById(Long.parseLong(userId));
+
+        if(user.isEmpty()){
+            return List.of();
+        }
+
+        User existingUser = user.get();
+        List<CartItem> cartItems = cartItemRepository.findByUser(existingUser);
+
+        return cartItems;
+    }
+
+    public void clearCart(String userId){
+        User user = userRepository.findById(Long.parseLong(userId))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        cartItemRepository.deleteByUser(user);
+    }
 }
